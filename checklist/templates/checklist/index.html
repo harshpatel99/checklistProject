@@ -1,0 +1,181 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'checklist/css/bootstrap.min.css' %}">
+    <script src="{% static 'checklist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'checklist/checklist.js' %}"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+    <title>Pre-departure Checklist</title>
+
+    <script>
+        setTimeout(function () {
+            $('.toast_alert').remove();
+        }, 2000)
+    </script>
+
+</head>
+
+<body>
+    <main>
+        <div class="container pt-3 ">
+
+            {% if updated > 0 %}
+
+            <div id="toast_alert" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>{{ updated }}</strong> Items Updated.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            {% endif %}
+
+            <form action="" method="POST">
+
+                {% csrf_token %}
+
+                {% for category in categories %}
+
+                <div class="bg-light rounded-3 shadow-sm p-3 m-3 mx-md-8">
+                    <div class="mt-1">
+                        <h4 class="p-2">
+                            {{ category }}
+                        </h4>
+                    </div>
+
+                    {% for listItem in checklist %}
+                    {% if listItem.category_id == category.id %}
+
+                    <div class="clearfix my-1 col align-items-center justify-content-center">
+                        <div class="float-start">
+                            <div class="form-check ms-3">
+                                {% if listItem in checkedItems %}
+                                <input class="form-check-input" name="check" value="{{listItem}}" id="{{listItem.id}}"
+                                    type="checkbox" checked>
+                                {% else %}
+                                <input class="form-check-input" name="check" value="{{listItem}}" id="{{listItem.id}}"
+                                    type="checkbox">
+                                {% endif %}
+                                <label class="form-check-label" for="{{listItem.id}}">
+                                    {{listItem.name}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="float-end d-flex">
+                            <div
+                                class="{% if listItem.needed != True %}invisible{% endif %} px-3 col d-flex align-items-center justify-content-center">
+                                <img src="https://www.freepnglogos.com/uploads/dot-png/dot-background-image-design-joy-studio-design-gallery-best-28.png"
+                                    class="mx-auto d-block" width="12px" height="12px" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Needed">
+                            </div>
+
+                            <div class="{% if listItem.url == '' %}invisible{% endif %} recommendButtonUrl rounded-pill bg-white py-1 px-3 ms-1 me-3 col d-flex align-items-center justify-content-center"
+                                data-bs-toggle="tooltip" data-bs-placement="top" title="Recommendations">
+                                <a href="{{listItem.url}}">
+                                    <img src="https://pics.freeicons.io/uploads/icons/png/18926654601543238879-512.png"
+                                        class="mx-auto d-block" width="12px" height="12px">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+
+                {% endfor %}
+
+                <div style="position: sticky; bottom: 1rem; width:100%; display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+
+        </div>
+    </main>
+</body>
+
+</html>
+
+
+<!--
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'checklist/css/bootstrap.min.css' %}">
+    <script src="{% static 'checklist/js/bootstrap.min.js' %}"></script>
+
+    <title>Pre-departure Checklist</title>
+</head>
+
+<body>
+    <main>
+        <div class="container pt-3 ">
+
+            {% for item in checklist %}
+
+            {% for element in item.categories %}
+
+            <div class="bg-light rounded-3 shadow-sm p-3 m-3 mx-md-8">
+                <div class="mt-1">
+                    <h4 class="p-2">
+                        {{ element.name.title }}
+                    </h4>
+                </div>
+
+                {% for listItem in item.data %}
+                {% if listItem.category == element.name.title %}
+
+                <div class="clearfix my-1 col align-items-center justify-content-center">
+                    <div class="float-start">
+                        <div class="form-check ms-3">
+                            <input class="form-check-input" id="{{listItem.id}}" type="checkbox">
+                            <label class="form-check-label" for="{{listItem.id}}">
+                                {{listItem.name}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="float-end d-flex">
+                        <div
+                            class="{% if listItem.needed != True %}invisible{% endif %} px-3 col d-flex align-items-center justify-content-center">
+                            <img src="https://www.freepnglogos.com/uploads/dot-png/dot-background-image-design-joy-studio-design-gallery-best-28.png"
+                                class="mx-auto d-block" width="12px" height="12px" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Needed">
+                        </div>
+                        <div class="{% if listItem.url == '' %}invisible{% endif %} rounded-pill bg-white py-1 px-3 ms-1 me-3 col d-flex align-items-center justify-content-center"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Recommendations">
+                            <img src="https://pics.freeicons.io/uploads/icons/png/18926654601543238879-512.png"
+                                class="mx-auto d-block" width="12px" height="12px">
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+                {% endfor %}
+            </div>
+
+
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+    </main>
+</body>
+
+</html>
+
+-->

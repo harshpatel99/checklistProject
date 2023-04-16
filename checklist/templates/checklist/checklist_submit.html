@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'checklist/css/bootstrap.min.css' %}">
+    <script src="{% static 'checklist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'checklist/checklist.js' %}"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+    <title>Checklist Updated</title>
+
+    <script>
+        setTimeout(function () {
+            $('.toast_alert').remove();
+        }, 2000)
+    </script>
+
+</head>
+
+<body>
+    <main>
+        <div class="container pt-3 ">
+
+            <div class="bg-light rounded-3 shadow-sm p-3 m-3 mx-md-8">
+                <div class="mt-1">
+                    <h3 class="p-2">
+                        {{ updated }} Items Updated
+                    </h3>
+                </div>
+            </div>
+
+            <div id="toast_alert" class="alert shadow fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ updated }} Items Updated
+            </div>
+
+        </div>
+    </main>
+</body>
+
+</html>
